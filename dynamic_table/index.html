@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Table</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body style="display: flex; justify-content: center; align-items: center">
+    <div style="text-align: center">
+      <h1>Dynamically Add/Remove Rows from Table using jQuery</h1>
+      <select id="batch" style="margin: 2%">
+        <option value="b1">Batch 1</option>
+        <option value="b2">Batch 2</option>
+      </select>
+      <table id="myTable" border="1">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll" /></th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Roll</th>
+            <th>Action</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>
+              <input type="text" placeholder="first name" id="first_name" />
+            </th>
+            <th>
+              <input type="text" placeholder="last_name" id="last_name" />
+            </th>
+            <th><input type="text" placeholder="roll" id="roll" /></th>
+            <th><button class="btn" id="addRow">Add Row</button></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button id="submit" style="margin: 2%">Submit</button>
+    </div>
+    <script>
+      // Initialize data
+      var batch1 = [
+        { first_name: "Aohn", last_name: "Doe", roll: 35 },
+        { first_name: "Bane", last_name: "Doe", roll: 28 },
+        { first_name: "Cob", last_name: "Smith", roll: 42 },
+      ];
+
+      var batch2 = [
+        { first_name: "Sohn", last_name: "Doe", roll: 35 },
+        { first_name: "Uane", last_name: "Doe", roll: 28 },
+        { first_name: "Zob", last_name: "Smith", roll: 42 },
+      ];
+
+      var data = batch1;
+
+      // Handle dropdown
+      $("#batch").change(function () {
+        var selectedValue = $(this).val();
+        if (selectedValue === "b1") {
+          data = batch1;
+          createTable();
+        } else {
+          data = batch2;
+          createTable();
+        }
+      });
+
+      // Initialize table with data
+      $(document).ready(function () {
+        createTable();
+      });
+
+      function createTable() {
+        $("#myTable tbody").empty();
+        $.each(data, function (index, value) {
+          addRow(value, index);
+        });
+      }
+
+      // Add row to table
+      function addRow(data, index) {
+        var row =
+          "<tr>" +
+          `<td><input type="checkbox" class="checkbox" value=${index}></td>` +
+          "<td>" +
+          data.first_name +
+          "</td>" +
+          "<td>" +
+          data.last_name +
+          "</td>" +
+          "<td>" +
+          data.roll +
+          "</td>" +
+          '<td><button class="btn" onclick="removeRow(this)">Remove</button></td>' +
+          "</tr>";
+        $("#myTable tbody").append(row);
+      }
+
+      // Remove row from table
+      function removeRow(button) {
+        $(button).closest("tr").remove();
+      }
+
+      // Add new row when "Add Row" button is clicked
+      $("#addRow").click(function () {
+        var newData = {
+          first_name: $("#first_name").val(),
+          last_name: $("#last_name").val(),
+          roll: $("#roll").val(),
+        };
+        $("#first_name").val("");
+        $("#last_name").val("");
+        $("#roll").val("");
+        addRow(newData, data.length);
+        data.push(newData);
+      });
+
+      // Check or uncheck all
+      $("#selectAll").change(function () {
+        if ($(this).prop("checked")) {
+          $(".checkbox").prop("checked", true);
+        } else {
+          $(".checkbox").prop("checked", false);
+        }
+      });
+
+      // handle submit click
+      $("#submit").click(function () {
+        alert("Showing the index of all the selected checkbox");
+        var selected = $(".checkbox:checked");
+        selected.each(function () {
+          alert($(this).val());
+        });
+      });
+    </script>
+  </body>
+</html>
