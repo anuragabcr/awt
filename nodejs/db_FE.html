@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script>
+      var data;
+      $(document).ready(() => {
+        readData();
+
+        $("#saveRecord").click(() => {
+          postData();
+        });
+
+        $("#updateRecord").click(() => {
+          putData();
+        });
+
+        $("#read-tab").click(() => {
+          readData();
+        });
+
+        $("#delete-tab").click(() => {
+          createDeleteTable();
+        });
+
+        $("#update-tab").click(() => {
+          createUpdateTable();
+        });
+      });
+
+      function putData() {
+        var emp_id = $("#uemp_id").val();
+        var name = $("#uname").val();
+        var salary = $("#usalary").val();
+        var data = { name, salary };
+        $.ajax({
+          url: `http://localhost:3000/employees/${emp_id}`,
+          type: "PUT",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function (response) {
+            $("#updateForm").attr("hidden", true);
+            createUpdateTable();
+            alert("Record updated successfully");
+          },
+          error: function (xhr, status, error) {
+            console.error("Request failed with status:", status);
+          },
+        });
+      }
+
+      function postData() {
+        var emp_id = $("#emp_id").val();
+        var name = $("#name").val();
+        var salary = $("#salary").val();
+        var data = { emp_id, name, salary };
+        $.ajax({
+          url: "http://localhost:3000/employees",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function (response) {
+            var emp_id = $("#emp_id").val("");
+            var name = $("#name").val("");
+            var salary = $("#salary").val("");
+            alert("Record saved successfully");
+          },
+          error: function (xhr, status, error) {
+            console.error("Request failed with status:", status);
+            alert("Error! try again or check console log")
+          },
+        });
+      }
+
+      function readData() {
+        $.ajax({
+          url: "http://localhost:3000/employees",
+          type: "GET",
+          dataType: "json",
+          success: function (response) {
+            createViewTable(response);
+          },
+          error: function (xhr, status, error) {
+            console.error("Request failed with status:", status);
+            alert("Error! try again or check console log")
+          },
+        });
+      }
+
+      function removeRow(id){
+        $.ajax({
+          url: `http://localhost:3000/employees/${id}`,
+          type: "DELETE",
+          success: function (response) {
+            createDeleteTable();
+          },
+          error: function (xhr, status, error) {
+            console.error("Request failed with status:", status);
+            alert("Error! try again or check console log")
+          },
+        });
+      }
+
+      function updateRow(index) {
+        $("#updateForm").attr("hidden", false)
+        $("#uemp_id").val(data[index].emp_id)
+        $("#uname").val(data[index].name)
+        $("#usalary").val(data[index].salary)
+      }
+
+      function createUpdateTable() {
+        $.ajax({
+          url: "http://localhost:3000/employees",
+          type: "GET",
+          dataType: "json",
+          success: function (response) {
+            data = response;
+            $("#updateTable tbody").empty();
+            $.each(response, function (index, value) {
+              var row =
+                "<tr>" +
+                "<td>" +
+                value.emp_id +
+                "</td>" +
+                "<td>" +
+                value.name +
+                "</td>" +
+                "<td>" +
+                value.salary +
+                "</td>" +
+                `<td><button class="btn btn-success" onclick="updateRow(${index})">Update</button></td>` +
+                "</tr>";
+              $("#updateTable tbody").append(row);
+            });
+          },
+          error: function (xhr, status, error) {
+            console.error("Request failed with status:", status);
+            alert("Error! try again or check console log")
+          },
+        });
+      }
+
+      function createDeleteTable() {
+        $.ajax({
+          url: "http://localhost:3000/employees",
+          type: "GET",
+          dataType: "json",
+          success: function (response) {
+            $("#deleteTable tbody").empty();
+            $.each(response, function (index, value) {
+              var row =
+                "<tr>" +
+                "<td>" +
+                value.emp_id +
+                "</td>" +
+                "<td>" +
+                value.name +
+                "</td>" +
+                "<td>" +
+                value.salary +
+                "</td>" +
+                `<td><button class="btn btn-danger" onclick="removeRow(${value.emp_id})">Remove</button></td>` +
+                "</tr>";
+              $("#deleteTable tbody").append(row);
+            });
+          },
+          error: function (xhr, status, error) {
+            console.error("Request failed with status:", status);
+            alert("Error! try again or check console log")
+          },
+        });
+      }
+
+      function createViewTable(data) {
+        $("#readTable tbody").empty();
+        $.each(data, function (index, value) {
+          var row =
+            "<tr>" +
+            "<td>" +
+            value.emp_id +
+            "</td>" +
+            "<td>" +
+            value.name +
+            "</td>" +
+            "<td>" +
+            value.salary +
+            "</td>" +
+            "</tr>";
+          $("#readTable tbody").append(row);
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container" style="padding: 2%;">
+      <h3>CRUD operations on Database</h3>
+      <h5>Tech used are</h5>
+      <ul>
+        <li>Node Js and Express to cretae the Backend</li>
+        <li>MySQL as Database</li>
+        <li>HTML and jquery to cretae the Frontend</li>
+        <li>Bootstrap for design</li>
+      </ul>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="read-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#read"
+            type="button"
+            role="tab"
+            aria-controls="read"
+            aria-selected="true"
+          >
+            Read / View Records
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="create-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#create"
+            type="button"
+            role="tab"
+            aria-controls="create"
+            aria-selected="false"
+          >
+            Create / Insert Record
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="update-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#update"
+            type="button"
+            role="tab"
+            aria-controls="update"
+            aria-selected="false"
+          >
+            Update Record
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="delete-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#delete"
+            type="button"
+            role="tab"
+            aria-controls="delete"
+            aria-selected="false"
+          >
+            Delete Record
+          </button>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div
+          class="tab-pane fade show active"
+          id="read"
+          role="tabpanel"
+          aria-labelledby="read-tab"
+        >
+          <table class="table" id="readTable">
+            <thead>
+              <tr>
+                <th scope="col">Emp ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Salary</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="create"
+          role="tabpanel"
+          aria-labelledby="create-tab"
+        >
+          <div class="mb-3">
+            <label for="emp_id" class="form-label">Enter Emp ID</label>
+            <input type="text" class="form-control" id="emp_id" required />
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">Enter Name</label>
+            <input type="text" class="form-control" id="name" required />
+          </div>
+          <div class="mb-3">
+            <label for="salary" class="form-label">Enter Salary</label>
+            <input type="number" class="form-control" id="salary" required />
+          </div>
+          <button id="saveRecord" class="btn btn-primary">Save</button>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="update"
+          role="tabpanel"
+          aria-labelledby="update-tab"
+        >
+        <table class="table" id="updateTable">
+          <thead>
+            <tr>
+              <th scope="col">Emp ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Salary</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="updateForm" hidden="true">
+          <div class="mb-3">
+            <label for="uemp_id" class="form-label">Enter Emp ID</label>
+            <input type="text" class="form-control" id="uemp_id" disabled />
+          </div>
+          <div class="mb-3">
+            <label for="uname" class="form-label">Enter Name</label>
+            <input type="text" class="form-control" id="uname" required />
+          </div>
+          <div class="mb-3">
+            <label for="usalary" class="form-label">Enter Salary</label>
+            <input type="number" class="form-control" id="usalary" required />
+          </div>
+          <button id="updateRecord" class="btn btn-primary">Update</button>
+        </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="delete"
+          role="tabpanel"
+          aria-labelledby="delete-tab"
+        >
+          <table class="table" id="deleteTable">
+            <thead>
+              <tr>
+                <th scope="col">Emp ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Salary</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

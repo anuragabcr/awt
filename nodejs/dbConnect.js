@@ -20,6 +20,28 @@ connection.connect((err) => {
 });
 
 app.use(bodyParser.json());
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/db_FE.html");
+});
+
+app.get("/employees", (req, res) => {
+  const sql = `SELECT * FROM employees`;
+
+  connection.query(sql, (err, results, fields) => {
+    if (err) {
+      console.error("Error retrieving employee record: ", err);
+      res.sendStatus(500);
+    } else {
+      if (results.length === 0) {
+        res.sendStatus(404);
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  });
+});
+
 app.post("/employees", (req, res) => {
   const { emp_id, name, salary } = req.body;
 
