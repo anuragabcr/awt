@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCA 2nd Semester - AWT Course</title>
+</head>
+<body>
+  <h1>MCA 2nd Semester - AWT Course</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Roll</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+      </tr>
+    </thead>
+    <tbody id="studentTableBody">
+    </tbody>
+  </table>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+  $(document).ready(function() {
+  $.ajax({
+    url: 'http://localhost:3000/students',
+    method: 'GET',
+    type: 'json',
+    success: function(data) {
+        
+      var studentData = '';
+
+      data.forEach(function(student) {
+          studentData += '<tr>';
+          studentData += '<td>' + student.roll + '</td>';
+          studentData += '<td>' + student.name + '</td>';
+          studentData += '<td>' + student.email + '</td>';
+          studentData += '<td>' + student.phone + '</td>';
+          studentData += '</tr>';
+        
+      });
+
+      $('#studentTableBody').html(studentData);
+    },
+    error: function(err) {
+      console.log('Error fetching student data:', err);
+    }
+  });
+});
+
+  </script>
+</body>
+</html>

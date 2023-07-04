@@ -1,6 +1,8 @@
-const express = require("express");
-const mysql = require("mysql");
-const bodyParser = require("body-parser");
+import express from "express";
+import bodyParser from "body-parser";
+import path from "path";
+import mysql from "mysql";
+const __dirname = path.resolve();
 
 const app = express();
 

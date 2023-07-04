@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Profile</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Employee Profile</h1>
+
+    <!-- Personal Details Section -->
+    <h2>Personal Details</h2>
+    <form>
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter your email">
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address</label>
+        <textarea class="form-control" id="address" rows="3" placeholder="Enter your address"></textarea>
+      </div>
+
+      <!-- Add more personal details fields as needed -->
+
+      <button type="submit" class="btn btn-primary">Save Personal Details</button>
+    </form>
+
+    <!-- Qualification Section -->
+    <h2>Qualification</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Qualification</th>
+          <th>Institute</th>
+          <th>Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Bachelor's Degree</td>
+          <td>XYZ University</td>
+          <td>2010</td>
+        </tr>
+        <!-- Add more qualification rows as needed -->
+      </tbody>
+    </table>
+
+    <!-- Awards Section -->
+    <h2>Awards</h2>
+    <ul class="list-group">
+      <li class="list-group-item">Award 1</li>
+      <li class="list-group-item">Award 2</li>
+      <!-- Add more award items as needed -->
+    </ul>
+
+    <!-- Papers Published Section -->
+    <h2>Papers Published</h2>
+    <div id="papersAccordion">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#paper1" aria-expanded="true"
+              aria-controls="paper1">
+              Paper 1
+            </button>
+          </h5>
+        </div>
+
+        <div id="paper1" class="collapse show" data-parent="#papersAccordion">
+          <div class="card-body">
+            <p>Paper 1 details go here...</p>
+          </div>
+        </div>
+      </div>
+      <!-- Add more papers as needed -->
+    </div>
+
+    <!-- Pagination -->
+    <nav>
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
