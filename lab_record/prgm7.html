@@ -7,6 +7,7 @@
 </head>
 <body>
   <h1>MCA 2nd Semester - AWT Course</h1>
+  <div id="data"></div>
   <table border="1">
     <thead>
       <tr>
@@ -29,6 +30,7 @@
     method: 'GET',
     type: 'json',
     success: function(data) {
+      $("#data").text(JSON.stringify(data))
         
       var studentData = '';
 

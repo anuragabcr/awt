@@ -26,7 +26,7 @@ const studentSchema = new mongoose.Schema({
 const Student = mongoose.model("Student", studentSchema);
 
 app.get("/students", (req, res) => {
-  Student.find({ semester: "MCA 2", course: "AWT" })
+  Student.find()
     .then((students) => res.json(students))
     .catch((error) =>
       res.status(500).json({
