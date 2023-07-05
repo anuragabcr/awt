@@ -1,33 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCA 2nd Semester - AWT Course</title>
+    <title>File Upload</title>
 </head>
-
 <body>
-    <h1>MCA 2nd Semester - AWT Course</h1>
-    <div id="data"></div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js"></script>
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: 'http://localhost:3000/students',
-                method: 'GET',
-                type: 'json',
-                success: function (data) {
-                    $("#data").text(JSON.stringify(data))
-                },
-                error: function (err) {
-                    console.log('Error fetching student data:', err);
-                }
-            });
-        });
-
-    </script>
+    <h1>Upload File</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">Upload</button>
+    </form>
 </body>
-
 </html>
