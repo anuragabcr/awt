@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ping Pong Game</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    #game-board {
+      position: relative;
+      width: 800px;
+      height: 400px;
+      margin: 0 auto;
+      border: 1px solid black;
+    }
+    #paddle-left, #paddle-right {
+      position: absolute;
+      width: 20px;
+      height: 100px;
+      background-color: black;
+    }
+    #ball {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">Ping Pong Game</h1>
+    <div id="game-board">
+      <div id="paddle-left"></div>
+      <div id="paddle-right"></div>
+      <div id="ball"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+      // Game variables
+      var boardWidth = 800;
+      var boardHeight = 400;
+      var paddleSpeed = 5;
+      var ballSpeedX = 3;
+      var ballSpeedY = 3;
+      var paddleLeftY = 150;
+      var paddleRightY = 150;
+      var scoreLeft = 0;
+      var scoreRight = 0;
+      var gameLoop;
+
+      // Update game state
+      function update() {
+        // Move paddles
+        if (keys[38] && paddleRightY > 0) {
+          paddleRightY -= paddleSpeed;
+        }
+        if (keys[40] && paddleRightY < boardHeight - 100) {
+          paddleRightY += paddleSpeed;
+        }
+        if (keys[87] && paddleLeftY > 0) {
+          paddleLeftY -= paddleSpeed;
+        }
+        if (keys[83] && paddleLeftY < boardHeight - 100) {
+          paddleLeftY += paddleSpeed;
+        }
+
+        // Move ball
+        var ball = $('#ball');
+        var ballX = parseInt(ball.css('left'));
+        var ballY = parseInt(ball.css('top'));
+
+        ball.css('left', ballX + ballSpeedX);
+        ball.css('top', ballY + ballSpeedY);
+
+        // Ball collision with paddles
+        if (ballX <= 40 && ballY + 20 >= paddleLeftY && ballY <= paddleLeftY + 100) {
+          ballSpeedX = -ballSpeedX;
+        }
+        if (ballX + 20 >= boardWidth - 40 && ballY + 20 >= paddleRightY && ballY <= paddleRightY + 100) {
+          ballSpeedX = -ballSpeedX;
+        }
+
+        // Ball collision with top/bottom walls
+        if (ballY <= 0 || ballY + 20 >= boardHeight) {
+          ballSpeedY = -ballSpeedY;
+        }
+
+        // Ball out of bounds
+        if (ballX <= 0) {
+          scoreRight++;
+          resetBall();
+        }
+        if (ballX + 20 >= boardWidth) {
+          scoreLeft++;
+          resetBall();
+        }
+
+        // Update scores
+        $('#score-left').text(scoreLeft);
+        $('#score-right').text(scoreRight);
+      }
+
+      // Reset the ball position
+      function resetBall() {
+        var ball = $('#ball');
+        ball.css('left', (boardWidth - 20) / 2);
+        ball.css('top', (boardHeight - 20) / 2);
+        ballSpeedX = -ballSpeedX;
+      }
+
+      // Key state variables
+      var keys = {};
+
+      // Keyboard controls
+      $(document).keydown(function (e) {
+        keys[e.which] = true;
+      });
+      $(document).keyup(function (e) {
+        delete keys[e.which];
+      });
+
+      // Start the game loop
+      function startGame() {
+        gameLoop = setInterval(update, 16.67); // 60 FPS
+      }
+
+      // Stop the game loop
+      function stopGame() {
+        clearInterval(gameLoop);
+      }
+
+      // Reset the game
+      function resetGame() {
+        scoreLeft = 0;
+        scoreRight = 0;
+        $('#score-left').text(scoreLeft);
+        $('#score-right').text(scoreRight);
+        resetBall();
+      }
+
+      // Start the game on page load
+      $(document).ready(function () {
+        resetGame();
+        startGame();
+      });
+    </script>
+  </div>
+</body>
+</html>

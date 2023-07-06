@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,30 +8,40 @@
     <title>Notepad</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
     <script>
-        $(document).ready(function(){
-            $("#btn").click(function(){
+        // $(document).ready(function() {
+        //   $("#saveButton").click(function() {
+        //     var textToSave = $("#myTextarea").val();
+        //     var blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
+        //     saveAs(blob, "myTextFile.txt");
+        //   });
+        // });
+        $(document).ready(function () {
+            $("#btn").click(function () {
                 const title = $("#title").val()
                 const link = document.createElement("a");
-       const content = document.querySelector("textarea").value;
-       const file = new Blob([content], { type: 'text/plain' });
-       link.href = URL.createObjectURL(file);
-       link.download = title+".txt";
-    //    console.log(title);
-       link.click();
-       URL.revokeObjectURL(link.href);
+                const content = document.querySelector("textarea").value;
+                const file = new Blob([content], { type: 'text/plain' });
+                link.href = URL.createObjectURL(file);
+                link.download = title + ".txt";
+                //    console.log(title);
+                link.click();
+                URL.revokeObjectURL(link.href);
             })
         })
-   </script>
+    </script>
 
 </head>
+
 <body>
     <div class="container">
         <div><input id="title" type="text" placeholder="Give title"></div>
-        <div><textarea  id="mainarea"cols="50" rows="10"></textarea></div>
+        <div><textarea id="mainarea" cols="50" rows="10"></textarea></div>
         <div><button id="btn">Download</button></div>
-        
+
     </div>
 </body>
+
 </html>
